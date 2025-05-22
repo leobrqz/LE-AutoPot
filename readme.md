@@ -62,7 +62,7 @@ You can use the tool in three ways:
 ### 3. Run Natively with Python
 - Clone the repository:
   ```bash
-  git clone git clone https://github.com/leobrqz/LE-AutoPot
+  git clone https://github.com/leobrqz/LE-AutoPot
   cd LE-AutoPot
   ```
 - Install dependencies:
