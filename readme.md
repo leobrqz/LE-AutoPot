@@ -15,7 +15,7 @@ Based on [Skalety's Auto Potion](https://www.unknowncheats.me/forum/other-mmorpg
 **A few important notes:**
 - While it’s not a guarantee of survival, it will save you most of the time. It works with any class or build, just make sure you always have enough potions!
 - Because of how the game handles health and damage over time (DoT), if you take a lot of DoT or very fast hits, your HP can drop below the threshold very quickly, multiple times or stay below the threshold even with potion drinks.
-- The potion will trigger as soon as your real HP drops, but if the accumulated or incoming damage is higher than what a potion can heal, you might still die.
+- The potion will trigger as soon as your real HP drops below the threshold, but if the accumulated or incoming damage is higher than what a potion can heal, you might still die.
 - Be careful with heavy DoT or burst damage—there’s always a chance the damage is more than what a potion can save you from.
 
 
