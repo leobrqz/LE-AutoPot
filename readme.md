@@ -31,14 +31,14 @@ Based on [Skalety's Auto Potion](https://www.unknowncheats.me/forum/other-mmorpg
 You can use the tool in three ways:
 
 ### 1. Download the Executable
-- Download the latest release from the [Releases page](<your-release-url>).
+- Download the latest release from the [Releases page](https://github.com/leobrqz/LE-AutoPot/releases).
 - Run the `.exe` file directly (no Python required).
 
 ### 2. Build the Executable Yourself
 - Clone the repository:
   ```bash
-  git clone <your-repo-url>
-  cd Last-Epoch-Auto-Potion
+  git clone https://github.com/leobrqz/LE-AutoPot
+  cd LE-AutoPot
   ```
 - Install dependencies:
   ```bash
@@ -53,8 +53,8 @@ You can use the tool in three ways:
 ### 3. Run Natively with Python
 - Clone the repository:
   ```bash
-  git clone <your-repo-url>
-  cd Last-Epoch-Auto-Potion
+  git clone git clone https://github.com/leobrqz/LE-AutoPot
+  cd LE-AutoPot
   ```
 - Install dependencies:
   ```bash
