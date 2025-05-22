@@ -1,4 +1,4 @@
-# Last Epoch Auto Potion 🧙‍♂
+# LE Auto Potion 🧙‍♂
 
 
 [![Last Epoch Version](https://img.shields.io/badge/Last%20Epoch%20Version-1.2.4.1-purple)]()
