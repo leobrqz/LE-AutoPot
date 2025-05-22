@@ -55,12 +55,12 @@ You can use the tool in three ways:
   ```
   Now either run it natively via python or build the executable. 
 
-### 3. Run Natively with Python
+### 2. Run Natively with Python
 - Run the application:
   ```bash
   python src/main.py
   ```
-### 2. Build the Executable Yourself
+### 3. Build the Executable Yourself
 - Build the executable with PyInstaller:
   ```bash
   ./build_release.sh
