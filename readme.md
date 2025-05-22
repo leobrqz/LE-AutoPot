@@ -6,7 +6,7 @@
 
 A Windows overlay tool for Last Epoch that automatically uses potions when your HP drops below a configurable threshold. Features a PyQt5 overlay, hotkey controls, and direct memory reading for reliable automation.
 
-**> Warning**: This tool is intended for offline use. While it may work online, use it at your own discretion and risk.
+**⚠️Warning**: This tool is intended for offline use. While it may work online, use it at your own discretion and risk.
 
 Based on [Skalety's Auto Potion](https://www.unknowncheats.me/forum/other-mmorpg-and-strategy/699378-epoch-auto-potion-copied-games.html) <3
 
