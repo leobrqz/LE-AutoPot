@@ -12,6 +12,15 @@ Based on [Skalety's Auto Potion](https://www.unknowncheats.me/forum/other-mmorpg
 
 
 
+**A few important notes:**
+- While it’s not a guarantee of survival, it will save you most of the time. It works with any class or build, just make sure you always have enough potions!
+- Because of how the game handles health and damage over time (DoT), if you take a lot of DoT or very fast hits, your HP can drop below the threshold very quickly.
+- The potion will trigger as soon as your real HP drops, but if the accumulated or incoming damage is higher than what a potion can heal, you might still die.
+- Be careful with heavy DoT or burst damage—there’s always a chance the damage is more than what a potion can save you from.
+
+
+
+
 ## ✨ Features
 <p align="center">
   <img src="imgs/OverlayOFF.png" alt="Overlay OFF" width="45%"/>
@@ -83,13 +92,6 @@ You can use the tool in three ways:
   - Default position on bottom left corner before the player health
   - INITIAL_POS_X: 200
   - INITIAL_POS_Y: 880
-
-
-## 🖥️ Requirements
-- Windows 10+
-- Python 3.8+
-- Game: Last Epoch (tested on version 1.2.4.1)
-- Admin rights may be required to access game memory
 
 
 ## Credits
