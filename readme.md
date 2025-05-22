@@ -41,9 +41,9 @@ You can use the tool in three ways:
 
 ### 1. Download the Executable
 - Download the latest release from the [Releases page](https://github.com/leobrqz/LE-AutoPot/releases).
-- Run the `.exe` file directly (no Python required).
+- Run the `.exe` file directly.
 
-### 2. Build the Executable Yourself
+## Local Setup
 - Clone the repository:
   ```bash
   git clone https://github.com/leobrqz/LE-AutoPot
@@ -53,26 +53,20 @@ You can use the tool in three ways:
   ```bash
   pip install -r requirements.txt
   ```
-- Build the executable with PyInstaller:
-  ```bash
-  build_release.sh
-  ```
-- The executable will be in the `release/` folder.
+  Now either run it natively via python or build the executable. 
 
 ### 3. Run Natively with Python
-- Clone the repository:
-  ```bash
-  git clone https://github.com/leobrqz/LE-AutoPot
-  cd LE-AutoPot
-  ```
-- Install dependencies:
-  ```bash
-  pip install -r requirements.txt
-  ```
 - Run the application:
   ```bash
   python src/main.py
   ```
+### 2. Build the Executable Yourself
+- Build the executable with PyInstaller:
+  ```bash
+  ./build_release.sh
+  ```
+- The executable will be in the `release/` folder.
+
 
 
 ## ⚙️ Configuration
