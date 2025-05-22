@@ -67,6 +67,25 @@ You can use the tool in three ways:
   ```
 - The executable will be in the `release/` folder.
 
+## Hash verification 
+**Build date:** 2025-05-22  
+
+Sha256 Hash:
+```
+c252f841831d984bf9b000b7ee4b47c3fd1d95494cd15b14505254bb07b5fbb8
+```  
+You can verify the integrity of the executable (for  standalone or .zip package) by running either commands:  
+
+Bash (recommended):
+```bash
+sha256sum -c SHA256SUM.txt
+```  
+> The SHA256SUM.txt file is available for download on the Releases page and is also included in the .zip package.
+
+PowerShell/cmd:
+```cmd
+certutil -hashfile LE-AutoPot.exe SHA256
+```  
 
 
 ## ⚙️ Configuration
