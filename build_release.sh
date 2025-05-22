@@ -2,7 +2,7 @@
 # Build Last Epoch Auto Potion Release
 pyinstaller \
   --onefile \
-  --name="Last Epoch Auto Potion" \
+  --name="LE-AutoPot" \
   --icon=../imgs/PotionIcon.ico \
   --distpath release \
   --workpath build \
