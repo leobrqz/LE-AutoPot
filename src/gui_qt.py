@@ -1,11 +1,9 @@
-import sys
-from PyQt5.QtCore import Qt, QPoint, QTimer, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel
+from PyQt5.QtCore import Qt, QPoint, pyqtSignal, pyqtSlot
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel
 from PyQt5.QtGui import QFont, QPalette
 import keyboard
 from worker import AutoPotionWorker
 import config
-import user_config
 
 class OverlayWindow(QWidget):
     status_signal = pyqtSignal(str, str)
@@ -223,10 +221,3 @@ class OverlayWindow(QWidget):
     # Para o worker acessar o estado enabled
     def get(self):
         return self.auto_potion_enabled
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    user_cfg = user_config.read_user_config_ini()
-    window = OverlayWindow(user_cfg)
-    window.show()
-    sys.exit(app.exec_()) 

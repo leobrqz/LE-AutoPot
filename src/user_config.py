@@ -1,7 +1,6 @@
 import os
 import config
 import configparser
-import sys
 
 USER_CONFIG_FILE = "config_user.ini"
 

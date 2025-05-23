@@ -8,7 +8,6 @@ from pymem.process import module_from_name
  
 import game_memory
 import config
-import user_config
  
 # Worker thread for automated potion triggering based on in-game HP.
 class AutoPotionWorker(Thread):
