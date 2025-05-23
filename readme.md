@@ -19,6 +19,10 @@ Based on [Skalety's Auto Potion](https://www.unknowncheats.me/forum/other-mmorpg
 - Be careful with heavy DoT or burst damage—there’s always a chance the damage is more than what a potion can save you from.
 
 
+## 📝 Changelog
+
+### 1.1
+- Updated HP pointer offsets for Last Epoch version 1.2.5.1.
 
 
 ## ✨ Features
