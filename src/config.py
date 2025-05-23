@@ -13,13 +13,13 @@ THRESHOLD_PCT = 0.6               # HP percent to trigger potion
 STABLE_HP_DURATION = 5.0          # Seconds to consider HP stable
 
 # === Technical/Advanced Settings ===
-LAST_EPOCH_VERSION = "1.2.4.1" # offsets version
+LAST_EPOCH_VERSION = "1.2.5.1" # offsets version
 
 PROCESS_NAME = "Last Epoch.exe"
 WINDOW_TITLE = "Last Epoch"
 MODULE_NAME = "GameAssembly.dll"
-BASE_OFFSET = 0x04071400
-OFFSETS = [0xC0, 0x1F8, 0x30, 0xB8, 0x00, 0x88, 0x6C]
+BASE_OFFSET = 0x040A0338
+OFFSETS = [0xB8, 0x0, 0xA0, 0x6C]
 
 INTERVAL = 0.1
 WAIT_INTERVAL_PROCESS = 5

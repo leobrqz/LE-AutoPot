@@ -3,7 +3,7 @@
 pyinstaller \
   --clean \
   --onefile \
-  --name="LE-AutoPot" \
+  --name="LE-AutoPotv1.1" \
   --icon=../imgs/PotionIcon.ico \
   --distpath release \
   --workpath build \
