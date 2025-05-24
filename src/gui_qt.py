@@ -49,7 +49,6 @@ class OverlayWindow(QWidget):
         self.init_ui()
         self._register_hotkey()
         self._start_worker()
-        self._start_status_color_update()
 
     def init_ui(self):
         self.setWindowFlags(
@@ -63,7 +62,7 @@ class OverlayWindow(QWidget):
         self.setFixedSize(182, 170)
         self.move(pos_x, pos_y)
 
-        # Paleta para texto branco
+        # Palette for white text
         palette = QPalette()
         palette.setColor(QPalette.WindowText, Qt.white)
         self.setPalette(palette)
@@ -140,8 +139,6 @@ class OverlayWindow(QWidget):
 
     def toggle_auto_potion(self):
         self.auto_potion_enabled = not self.auto_potion_enabled
-        # Worker lê esse atributo diretamente
-        # Feedback visual opcional
         if self.auto_potion_enabled:
             self.set_status("ON", config.COLOR_ON)
         else:
@@ -172,7 +169,7 @@ class OverlayWindow(QWidget):
 
     def toggle_move_lock(self):
         self.move_locked = not self.move_locked
-        print(f"[Overlay] Move lock: {'ON' if self.move_locked else 'OFF'}")
+        print("[Overlay] Move lock: 'ON' if self.move_locked else 'OFF'")
 
     def _start_worker(self):
         self.worker_thread = AutoPotionWorker(
@@ -186,11 +183,7 @@ class OverlayWindow(QWidget):
         self.worker_thread.daemon = True
         self.worker_thread.start()
 
-    def _start_status_color_update(self):
-        # Não é estritamente necessário com PyQt, mas pode ser útil para animações futuras
-        pass
-
-    # Permitir arrastar a janela
+    # Allow dragging the window
     def mousePressEvent(self, event):
         if self.move_locked:
             return
@@ -218,6 +211,6 @@ class OverlayWindow(QWidget):
         import os
         os._exit(0)
 
-    # Para o worker acessar o estado enabled
+    # For the worker to access the enabled state
     def get(self):
         return self.auto_potion_enabled

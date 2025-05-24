@@ -62,7 +62,7 @@ class AutoPotionWorker(Thread):
         self.user_cfg = user_cfg
         self._last_potion_time = config.LAST_POTION_TIME_INIT
         self._potion_cooldown = self.user_cfg['POTION_COOLDOWN'] if self.user_cfg else config.POTION_COOLDOWN
-        self._process_found_printed = False  # para printar só uma vez
+        self._process_found_printed = False  # to print only once
  
     # Requests a state reset. Thread-safe.
     def request_reset(self):
@@ -385,13 +385,13 @@ class AutoPotionWorker(Thread):
                 self._last_potion_time = now
                 if self.add_potion_log_callback:
                     try:
-                        print(f"[DEBUG] Logando uso de poção: HP={current_hp}, MaxHP={self._max_hp}")
+                        print(f"[DEBUG] Logging potion use: HP={current_hp}, MaxHP={self._max_hp}")
                         if self.gui is not None:
                             self.gui.log_signal.emit(current_hp, self._max_hp)
                         else:
                             self.add_potion_log_callback(current_hp, self._max_hp)
                     except Exception as e:
-                        print(f"[DEBUG] Erro ao logar poção: {e}")
+                        print(f"[DEBUG] Error logging potion: {e}")
  
     # Handles errors during HP monitoring phase.
     def _handle_monitoring_error(self, e):

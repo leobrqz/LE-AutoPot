@@ -53,7 +53,7 @@ def ensure_user_config_exists():
         write_default_config_ini()
         print("--------------------------------------------------------")
         print("'config_user.ini' was created.")
-        print("[Attention] It may be needed to restart the application in the first time to work properly.")
+        print("[Attention] It may be necessary to restart the application the first time for it to work properly.")
 
 def load_user_config():
     parser = configparser.ConfigParser()
