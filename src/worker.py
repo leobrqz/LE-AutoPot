@@ -167,7 +167,7 @@ class AutoPotionWorker(Thread):
                 self._pm = Pymem(config.PROCESS_NAME)
                 if not self._shutting_down:
                     if not self._process_found_printed:
-                        print(f"Game process '{config.PROCESS_NAME}' found!")
+                        print(f"[DEBUG] Game process '{config.PROCESS_NAME}' found!")
                         self._process_found_printed = True
                     self._update_active_status(f"Process '{config.PROCESS_NAME}' found.", config.COLOR_WAITING)
                 return True
@@ -176,7 +176,7 @@ class AutoPotionWorker(Thread):
                     self._update_active_status(f"Waiting for process: {config.PROCESS_NAME}...", config.COLOR_WAITING)
             except Exception as e:
                 if not self._shutting_down:
-                    self._update_active_status(f"Error during process search: {str(e)[:100]}", config.COLOR_ERROR)
+                    print(f"[ERROR] Error during process search: {str(e)[:100]}")
                 self._pm = None
  
             if not self._wait_with_checks(config.WAIT_INTERVAL_PROCESS): return False
@@ -187,7 +187,7 @@ class AutoPotionWorker(Thread):
         if self._hp_final_addr is not None and self._max_hp is not None: return True
  
         while self._should_continue_attempting_connection() and self._pm is not None:
-            if not self._shutting_down: self._update_active_status("Searching for HP address...", config.COLOR_WAITING)
+            print("[DEBUG] Searching for HP address...")
  
             try:
                 current_hp_addr = game_memory.get_hp_address(self._pm)
@@ -196,12 +196,15 @@ class AutoPotionWorker(Thread):
                     continue
  
                 self._hp_final_addr = current_hp_addr
+                print(f"[DEBUG] HP address found: 0x{self._hp_final_addr:X}")
                 # Performs initial HP read to set max HP and threshold.
                 self._perform_initial_hp_read_and_setup()
                 return True
             except Exception as e:
                 # Handles errors during address search.
-                self._handle_address_search_exception(e)
+                print(f"[ERROR] Error during address search: {str(e)[:100]}")
+                self._reset_core_state_variables()
+                self._is_active_logic_running = False
                 return False
         return False
  
@@ -209,14 +212,12 @@ class AutoPotionWorker(Thread):
     def _handle_address_not_found_during_search(self):
         try:
             module_from_name(self._pm.process_handle, config.MODULE_NAME)
-            if not self._shutting_down: self._update_active_status("Waiting for HP address/value...", config.COLOR_WAITING)
         except PymemError:
-            if not self._shutting_down: self._update_status("Process lost during address search.", config.COLOR_ERROR)
+            print("[DEBUG] Process lost during address search.")
             self._pm = None
             return False
         except Exception as e_proc_check:
-            if not self._shutting_down: self._update_status(f"Error during process check: {str(e_proc_check)[:100]}",
-                                                            config.COLOR_ERROR)
+            print(f"[ERROR] Error during process check: {str(e_proc_check)[:100]}")
             self._pm = None
             return False
  
@@ -233,18 +234,15 @@ class AutoPotionWorker(Thread):
                 self._stable_hp_timestamp = None
                 self._alerted = False
                 status_text = f"HP: {self._max_hp:.0f} / {self._max_hp:.0f} (100.0%) | Thresh: {self._threshold:.0f}"
-                if not self._shutting_down: self._update_active_status(status_text, config.COLOR_ON)
+                self._update_active_status(status_text, config.COLOR_ON)
             else:
-                if not self._shutting_down: self._update_active_status(
-                    "HP address found. Waiting for positive HP value...", config.COLOR_WAITING)
+                print("[DEBUG] HP address found. Waiting for positive HP value...")
         except Exception as read_err:
-            if not self._shutting_down: self._update_active_status(
-                f"HP address found. Error reading initial HP: {str(read_err)[:100]}", config.COLOR_ERROR)
+            print(f"[ERROR] HP address found. Error reading initial HP: {str(read_err)[:100]}")
  
     # Handles exceptions during address search.
     def _handle_address_search_exception(self, e):
-        if not self._shutting_down: self._update_status(f"Error during address search: {str(e)[:100]}",
-                                                        config.COLOR_ERROR)
+        print(f"[ERROR] Error during address search: {str(e)[:100]}")
         self._reset_core_state_variables()
         self._is_active_logic_running = False
  
@@ -296,7 +294,9 @@ class AutoPotionWorker(Thread):
         if current_time_val - last_check_time > self._ADDRESS_CHECK_INTERVAL:
             new_addr = game_memory.get_hp_address(self._pm)
             if new_addr is None: raise PymemError("Periodic pointer re-resolution: new_addr is None.")
-            if new_addr != self._hp_final_addr: self._hp_final_addr = new_addr
+            if new_addr != self._hp_final_addr:
+                print(f"[DEBUG] HP address changed: 0x{self._hp_final_addr:X} -> 0x{new_addr:X}")
+                self._hp_final_addr = new_addr
             return current_time_val
         return last_check_time
  
@@ -373,7 +373,7 @@ class AutoPotionWorker(Thread):
             elif self._max_hp is not None:
                 self._update_active_status(f"HP: {current_hp:.0f}/{self._max_hp:.0f} | Threshold: {self._threshold:.0f}", config.COLOR_ON)
             else:
-                self._update_active_status(f"HP: Determining Max HP... (Current: {current_hp:.0f})", config.COLOR_WAITING)
+                print(f"[DEBUG] HP: Determining Max HP... (Current: {current_hp:.0f})")
  
     # Checks if HP is below threshold and triggers potion key press.
     def _apply_auto_potion_logic(self, current_hp):
@@ -391,13 +391,13 @@ class AutoPotionWorker(Thread):
                         else:
                             self.add_potion_log_callback(current_hp, self._max_hp)
                     except Exception as e:
-                        print(f"[DEBUG] Error logging potion: {e}")
+                        print(f"[ERROR] Error logging potion: {e}")
  
     # Handles errors during HP monitoring phase.
     def _handle_monitoring_error(self, e):
         if not self._shutting_down:
             error_prefix = "Process/Memory Error" if isinstance(e, PymemError) else "Error"
-            self._update_status(f"{error_prefix}: {str(e)[:100]}. Restarting search...", config.COLOR_ERROR)
+            print(f"[ERROR] {error_prefix}: {str(e)[:100]}. Restarting search...")
         self._reset_core_state_variables()
         self._is_active_logic_running = False
         sleep(self._ERROR_RECOVERY_PAUSE)

@@ -4,10 +4,5 @@ src/__pycache__/
 
 build/
 release/
-LE-AutoPot-v1.1.zip
-
 
 config_user.ini
-SHA256SUM.txt
-
-guidelines.md

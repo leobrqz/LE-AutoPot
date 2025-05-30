@@ -44,9 +44,9 @@ def write_default_config_ini():
 
         f.write("[Overlay]\n")
         f.write("# INITIAL_POS_X: Initial X position of the overlay window\n")
-        f.write("INITIAL_POS_X = 200\n")
+        f.write(f"INITIAL_POS_X = {config.INITIAL_POS_X}\n")
         f.write("# INITIAL_POS_Y: Initial Y position of the overlay window\n")
-        f.write("INITIAL_POS_Y = 880\n\n")
+        f.write(f"INITIAL_POS_Y = {config.INITIAL_POS_Y}\n\n")
 
 def ensure_user_config_exists():
     if not os.path.exists(USER_CONFIG_FILE):
@@ -56,6 +56,7 @@ def ensure_user_config_exists():
         print("[Attention] It may be necessary to restart the application the first time for it to work properly.")
 
 def load_user_config():
+    ensure_user_config_exists()
     parser = configparser.ConfigParser()
     parser.optionxform = str
     parser.read(USER_CONFIG_FILE)

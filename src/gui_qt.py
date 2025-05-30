@@ -13,21 +13,7 @@ class OverlayWindow(QWidget):
 
     def __init__(self, user_cfg):
         self.user_cfg = user_cfg
-        print("\n--------------------------------------------------------")
-        print("[Last Epoch Auto Potion Overlay]")
-        print(f"For Last Epoch version: {config.LAST_EPOCH_VERSION}")
-        print("\nHotkeys:")
-        print(f"  {self.user_cfg['HOTKEY_TOGGLE']:<20} - Toggle Auto Potion")
-        print(f"  {self.user_cfg['HOTKEY_HIDE_SHOW']:<20} - Show/Hide Overlay")
-        print(f"  {self.user_cfg['HOTKEY_CLOSE']:<20} - Close overlay")
-        print(f"  {self.user_cfg['HOTKEY_LOCK_MOVE']:<20} - Lock/Unlock movement")
-        print("\nAuto Potion configuration:")
-        print(f"  Potion Key: {self.user_cfg['POTION_KEY']}")
-        print(f"  Threshold: {int(float(self.user_cfg['THRESHOLD_PCT'])*100)}%")
-        print(f"  Potion Cooldown: {int(float(self.user_cfg['POTION_COOLDOWN'])*1000)} ms")
-        print(f"  Stable HP Duration: {int(float(self.user_cfg['STABLE_HP_DURATION']))} s")
-        print(f"  Initial Position: x={int(self.user_cfg.get('INITIAL_POS_X', 200))}, y={int(self.user_cfg.get('INITIAL_POS_Y', 880))}")
-        print("\n--------------------------------------------------------")
+        self.print_startup_info()
         super().__init__()
         self.old_pos = None
         self.auto_potion_enabled = False
@@ -50,6 +36,23 @@ class OverlayWindow(QWidget):
         self._register_hotkey()
         self._start_worker()
 
+    def print_startup_info(self):
+        print("\n--------------------------------------------------------")
+        print(f"[Last Epoch Auto Potion - v{config.APP_VERSION}]")
+        print(f"For Last Epoch version: {config.LAST_EPOCH_VERSION}")
+        print("\nHotkeys:")
+        print(f"  {self.user_cfg['HOTKEY_TOGGLE']:<20} - Toggle Auto Potion")
+        print(f"  {self.user_cfg['HOTKEY_HIDE_SHOW']:<20} - Show/Hide Overlay")
+        print(f"  {self.user_cfg['HOTKEY_CLOSE']:<20} - Close overlay")
+        print(f"  {self.user_cfg['HOTKEY_LOCK_MOVE']:<20} - Lock/Unlock movement")
+        print("\nAuto Potion configuration:")
+        print(f"  Potion Key: {self.user_cfg['POTION_KEY']}")
+        print(f"  Threshold: {int(float(self.user_cfg['THRESHOLD_PCT'])*100)}%")
+        print(f"  Potion Cooldown: {int(float(self.user_cfg['POTION_COOLDOWN'])*1000)} ms")
+        print(f"  Stable HP Duration: {int(float(self.user_cfg['STABLE_HP_DURATION']))} s")
+        print(f"  Initial Position: x={int(self.user_cfg['INITIAL_POS_X'])}, y={int(self.user_cfg['INITIAL_POS_Y'])}")
+        print("\n--------------------------------------------------------")
+
     def init_ui(self):
         self.setWindowFlags(
             Qt.FramelessWindowHint |
@@ -57,8 +60,8 @@ class OverlayWindow(QWidget):
             Qt.Tool
         )
         self.setAttribute(Qt.WA_TranslucentBackground)
-        pos_x = int(self.user_cfg.get('INITIAL_POS_X', 200))
-        pos_y = int(self.user_cfg.get('INITIAL_POS_Y', 880))
+        pos_x = int(self.user_cfg['INITIAL_POS_X'])
+        pos_y = int(self.user_cfg['INITIAL_POS_Y'])
         self.setFixedSize(182, 170)
         self.move(pos_x, pos_y)
 
@@ -169,7 +172,7 @@ class OverlayWindow(QWidget):
 
     def toggle_move_lock(self):
         self.move_locked = not self.move_locked
-        print("[Overlay] Move lock: 'ON' if self.move_locked else 'OFF'")
+        print(f"[Overlay] Move lock: {'ON' if self.move_locked else 'OFF'}")
 
     def _start_worker(self):
         self.worker_thread = AutoPotionWorker(

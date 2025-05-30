@@ -1,7 +1,7 @@
 # Last Epoch Auto Potion 🧙‍♂
 
 
-[![Last Epoch Version](https://img.shields.io/badge/Last%20Epoch%20Version-1.2.5.1-purple)]()
+[![Last Epoch Version](https://img.shields.io/badge/Last%20Epoch%20Version-1.2.5.2-purple)]()
 [![Windows](https://img.shields.io/badge/Platform-Windows%20%7C%20pywin32-blue)](https://github.com/mhammond/pywin32)
 
 A Windows overlay tool for Last Epoch that automatically uses potions when your HP drops below a configurable threshold. Features a PyQt5 overlay, hotkey controls, and direct memory reading for reliable automation.
@@ -21,8 +21,13 @@ Based on [Skalety's Auto Potion](https://www.unknowncheats.me/forum/other-mmorpg
 
 ## 📝 Changelog
 
-### 1.1
-- Updated HP pointer offsets for Last Epoch version 1.2.5.1.
+### **1.2**
+- Updated offsets for Last Epoch version **1.2.5.2**.
+- Small overlay improvements
+- Added more relevant debug statements to the console
+
+### **1.1**
+- Updated HP pointer offsets for Last Epoch version **1.2.5.1**.
 
 
 ## ✨ Features
