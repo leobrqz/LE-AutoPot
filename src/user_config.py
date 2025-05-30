@@ -1,6 +1,6 @@
-import os
+from os import path
 import config
-import configparser
+from configparser import ConfigParser
 
 USER_CONFIG_FILE = "config_user.ini"
 
@@ -49,7 +49,7 @@ def write_default_config_ini():
         f.write(f"INITIAL_POS_Y = {config.INITIAL_POS_Y}\n\n")
 
 def ensure_user_config_exists():
-    if not os.path.exists(USER_CONFIG_FILE):
+    if not path.exists(USER_CONFIG_FILE):
         write_default_config_ini()
         print("--------------------------------------------------------")
         print("'config_user.ini' was created.")
@@ -57,7 +57,7 @@ def ensure_user_config_exists():
 
 def load_user_config():
     ensure_user_config_exists()
-    parser = configparser.ConfigParser()
+    parser = ConfigParser()
     parser.optionxform = str
     parser.read(USER_CONFIG_FILE)
     user_cfg = {}

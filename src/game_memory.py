@@ -1,7 +1,7 @@
-import pymem
-import pymem.process
-import win32gui
-import time
+from pymem import exception as pymem_exception
+from pymem.process import module_from_name
+from win32gui import FindWindow, GetForegroundWindow
+from time import time
 
 import config
  
@@ -13,14 +13,14 @@ def get_hp_address(pm):
         get_hp_address.last_error_time = 0
     if not hasattr(get_hp_address, "last_successful_chain"):
         get_hp_address.last_successful_chain = None
-    COOLDOWN = 300  # 5 minutes in seconds
+    COOLDOWN = 60  # 1 minute in seconds
     try:
         # Ensure Pymem object is valid.
         if pm is None or pm.process_handle is None:
              return None
  
         # Get module information to calculate base address.
-        mod = pymem.process.module_from_name(pm.process_handle, config.MODULE_NAME)
+        mod = module_from_name(pm.process_handle, config.MODULE_NAME)
  
         if mod is None:
             error_msg = f"[ERROR] Module not found: {config.MODULE_NAME}"
@@ -64,7 +64,7 @@ def get_hp_address(pm):
                     return None
                 addr = next_addr
                 chain_addresses.append(addr)
-            except pymem.exception.PymemError as e:
+            except pymem_exception.PymemError as e:
                 error_msg = f"[ERROR] PymemError during pointer chain at index {i}: {e}"
                 now = time.time()
                 if get_hp_address.last_error != error_msg or now - get_hp_address.last_error_time > COOLDOWN:
@@ -90,7 +90,7 @@ def get_hp_address(pm):
         get_hp_address.last_error = None
         return addr
  
-    except pymem.exception.PymemError as e:
+    except pymem_exception.PymemError as e:
         error_msg = f"[ERROR] PymemError in get_hp_address: {e}"
         now = time.time()
         if get_hp_address.last_error != error_msg or now - get_hp_address.last_error_time > COOLDOWN:
@@ -110,10 +110,10 @@ def get_hp_address(pm):
 # Checks if the target game window is currently the foreground (active) window.
 def is_target_window_foreground():
     # Find the handle of the target window by its title.
-    target_hwnd = win32gui.FindWindow(None, config.WINDOW_TITLE)
+    target_hwnd = FindWindow(None, config.WINDOW_TITLE)
     if target_hwnd:
         # Get the handle of the current foreground window.
-        foreground_hwnd = win32gui.GetForegroundWindow()
+        foreground_hwnd = GetForegroundWindow()
         # Return True if the target window is the foreground window.
         return target_hwnd == foreground_hwnd
     # Return False if the target window was not found.

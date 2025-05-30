@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt, QPoint, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel
 from PyQt5.QtGui import QFont, QPalette
-import keyboard
+from keyboard import add_hotkey, remove_hotkey
 from worker import AutoPotionWorker
 import config
 
@@ -148,16 +148,16 @@ class OverlayWindow(QWidget):
             self.set_status("OFF", config.COLOR_OFF)
 
     def _register_hotkey(self):
-        keyboard.add_hotkey(self.user_cfg['HOTKEY_TOGGLE'], self.toggle_auto_potion)
-        keyboard.add_hotkey(self.user_cfg['HOTKEY_CLOSE'], self._close_via_hotkey)
-        keyboard.add_hotkey(self.user_cfg['HOTKEY_HIDE_SHOW'], self.toggle_visibility)
-        keyboard.add_hotkey(self.user_cfg['HOTKEY_LOCK_MOVE'], self.toggle_move_lock)
+        add_hotkey(self.user_cfg['HOTKEY_TOGGLE'], self.toggle_auto_potion)
+        add_hotkey(self.user_cfg['HOTKEY_CLOSE'], self._close_via_hotkey)
+        add_hotkey(self.user_cfg['HOTKEY_HIDE_SHOW'], self.toggle_visibility)
+        add_hotkey(self.user_cfg['HOTKEY_LOCK_MOVE'], self.toggle_move_lock)
 
     def _unregister_hotkey(self):
-        keyboard.remove_hotkey(self.user_cfg['HOTKEY_TOGGLE'])
-        keyboard.remove_hotkey(self.user_cfg['HOTKEY_CLOSE'])
-        keyboard.remove_hotkey(self.user_cfg['HOTKEY_HIDE_SHOW'])
-        keyboard.remove_hotkey(self.user_cfg['HOTKEY_LOCK_MOVE'])
+        remove_hotkey(self.user_cfg['HOTKEY_TOGGLE'])
+        remove_hotkey(self.user_cfg['HOTKEY_CLOSE'])
+        remove_hotkey(self.user_cfg['HOTKEY_HIDE_SHOW'])
+        remove_hotkey(self.user_cfg['HOTKEY_LOCK_MOVE'])
 
     def _close_via_hotkey(self):
         self.close()
