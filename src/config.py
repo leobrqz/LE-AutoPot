@@ -26,9 +26,13 @@ MODULE_NAME = "GameAssembly.dll"
 BASE_OFFSET = 0x410C328
 OFFSETS = [0xB8, 0x0, 0xA0, 0x6C]
 
-# Backup offsets
+# Backup pointer 1
 # BASE_OFFSET = 0x44DF308
 # OFFSETS = [0x88, 0xE98, 0x30, 0x6C]
+
+# Backup pointer 2
+# BASE_OFFSET = 0x44DF308
+# OFFSETS = [0x88, 0xEA8, 0x178, 0x6C]
 
 INTERVAL = 0.1
 WAIT_INTERVAL_PROCESS = 5
