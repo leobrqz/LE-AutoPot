@@ -38,7 +38,11 @@ class OverlayWindow(QWidget):
 
     def print_startup_info(self):
         print("\n--------------------------------------------------------")
-        print(f"[Last Epoch Auto Potion - v{config.APP_VERSION}]")
+        if self.user_cfg['DEVELOPER_DEBUG']:
+            print(f"[Last Epoch Auto Potion - v{config.APP_VERSION} (Developer Mode)]")
+        else:
+            print(f"[Last Epoch Auto Potion - v{config.APP_VERSION}]")
+        
         print(f"For Last Epoch version: {config.LAST_EPOCH_VERSION}")
         print("\nHotkeys:")
         print(f"  {self.user_cfg['HOTKEY_TOGGLE']:<20} - Toggle Auto Potion")

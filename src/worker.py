@@ -8,10 +8,10 @@ from pymem.process import module_from_name
  
 import game_memory
 import config
+from user_config import user_cfg
  
 # Worker thread for automated potion triggering based on in-game HP.
 class AutoPotionWorker(Thread):
- 
     _ADDRESS_CHECK_INTERVAL = 2.0
     _DISABLED_STATE_PAUSE = 0.1
     _ERROR_RECOVERY_PAUSE = 0.5
@@ -61,6 +61,7 @@ class AutoPotionWorker(Thread):
  
         self.user_cfg = user_cfg
         self._last_potion_time = config.LAST_POTION_TIME_INIT
+
         self._potion_cooldown = self.user_cfg['POTION_COOLDOWN'] if self.user_cfg else config.POTION_COOLDOWN
         self._process_found_printed = False  # to print only once
  
@@ -78,8 +79,6 @@ class AutoPotionWorker(Thread):
                 self._is_active_logic_running = False
                 self._reset_requested = False
                 reset_done = True
-        if reset_done and not self._shutting_down:
-            self._update_status("Reset requested. Waiting for process...", config.COLOR_WAITING)
         return reset_done
  
     # Updates GUI status text and color.
@@ -169,11 +168,11 @@ class AutoPotionWorker(Thread):
                     if not self._process_found_printed:
                         print(f"[DEBUG] Game process '{config.PROCESS_NAME}' found!")
                         self._process_found_printed = True
-                    self._update_active_status(f"Process '{config.PROCESS_NAME}' found.", config.COLOR_WAITING)
+                    self._update_active_status(f"Process found.", config.COLOR_WAITING)
                 return True
             except PymemError:
                 if not self._shutting_down:
-                    self._update_active_status(f"Waiting for process: {config.PROCESS_NAME}...", config.COLOR_WAITING)
+                    self._update_active_status(f"Waiting for process...", config.COLOR_WAITING)
             except Exception as e:
                 if not self._shutting_down:
                     print(f"[ERROR] Error during process search: {str(e)[:100]}")
@@ -293,7 +292,7 @@ class AutoPotionWorker(Thread):
         current_time_val = time()
         if current_time_val - last_check_time > self._ADDRESS_CHECK_INTERVAL:
             new_addr = game_memory.get_hp_address(self._pm)
-            if new_addr is None: raise PymemError("Periodic pointer re-resolution: new_addr is None.")
+            if new_addr is None: self.debug_print("Periodic pointer re-resolution: new_addr is None.")
             if new_addr != self._hp_final_addr:
                 print(f"[DEBUG] HP address changed: 0x{self._hp_final_addr:X} -> 0x{new_addr:X}")
                 self._hp_final_addr = new_addr
@@ -373,7 +372,7 @@ class AutoPotionWorker(Thread):
             elif self._max_hp is not None:
                 self._update_active_status(f"HP: {current_hp:.0f}/{self._max_hp:.0f} | Threshold: {self._threshold:.0f}", config.COLOR_ON)
             else:
-                print(f"[DEBUG] HP: Determining Max HP... (Current: {current_hp:.0f})")
+                self.debug_print(f"[DEBUG] HP: Determining Max HP... (Current: {current_hp:.0f})")
  
     # Checks if HP is below threshold and triggers potion key press.
     def _apply_auto_potion_logic(self, current_hp):
@@ -385,19 +384,19 @@ class AutoPotionWorker(Thread):
                 self._last_potion_time = now
                 if self.add_potion_log_callback:
                     try:
-                        print(f"[DEBUG] Logging potion use: HP={current_hp}, MaxHP={self._max_hp}")
+                        self.debug_print(f"[DEBUG] Logging potion use: HP={current_hp}, MaxHP={self._max_hp}")
                         if self.gui is not None:
                             self.gui.log_signal.emit(current_hp, self._max_hp)
                         else:
                             self.add_potion_log_callback(current_hp, self._max_hp)
                     except Exception as e:
-                        print(f"[ERROR] Error logging potion: {e}")
+                        self.debug_print(f"[ERROR] Error logging potion: {e}")
  
     # Handles errors during HP monitoring phase.
     def _handle_monitoring_error(self, e):
         if not self._shutting_down:
             error_prefix = "Process/Memory Error" if isinstance(e, PymemError) else "Error"
-            print(f"[ERROR] {error_prefix}: {str(e)[:100]}. Restarting search...")
+            self.debug_print(f"[ERROR] {error_prefix}: {str(e)[:100]}. Restarting search...")
         self._reset_core_state_variables()
         self._is_active_logic_running = False
         sleep(self._ERROR_RECOVERY_PAUSE)
@@ -429,6 +428,11 @@ class AutoPotionWorker(Thread):
                 if not self._perform_hp_monitoring_cycle(): continue
  
         print("Worker Thread stopped.")
+    
+    
+    def debug_print(self, message):
+        if self.user_cfg['DEVELOPER_DEBUG']:
+            print('> ' + message)
  
     # Signals the thread to stop gracefully.
     def stop(self):

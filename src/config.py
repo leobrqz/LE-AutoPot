@@ -15,8 +15,10 @@ STABLE_HP_DURATION = 5.0          # Seconds to consider HP stable
 INITIAL_POS_X = 200              # Initial X position of the overlay window
 INITIAL_POS_Y = 880              # Initial Y position of the overlay window
 
+# Developer debug flag (set by user config if available)
+DEVELOPER_DEBUG = False
 # === Technical/Advanced Settings ===
-APP_VERSION = "1.2"
+APP_VERSION = "1.2.1"
 LAST_EPOCH_VERSION = "1.2.5.2" # offsets version
 
 PROCESS_NAME = "Last Epoch.exe"
@@ -45,3 +47,4 @@ COLOR_ON = "green"
 COLOR_WAITING = "orange"
 COLOR_ERROR = "red"
 COLOR_PAUSED = "blue"
+

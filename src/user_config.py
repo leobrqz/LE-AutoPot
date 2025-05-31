@@ -16,6 +16,9 @@ DEFAULTS = {
         "POTION_COOLDOWN": str(config.POTION_COOLDOWN),
         "THRESHOLD_PCT": str(config.THRESHOLD_PCT),
         "STABLE_HP_DURATION": str(config.STABLE_HP_DURATION),
+    },
+    "Developer": {
+        "DEVELOPER_DEBUG": "false"
     }
 }
 
@@ -48,6 +51,10 @@ def write_default_config_ini():
         f.write("# INITIAL_POS_Y: Initial Y position of the overlay window\n")
         f.write(f"INITIAL_POS_Y = {config.INITIAL_POS_Y}\n\n")
 
+        f.write("[Developer]\n")
+        f.write("# DEVELOPER_DEBUG: Enable/disable developer debug mode\n")
+        f.write(f"DEVELOPER_DEBUG = {config.DEVELOPER_DEBUG}\n\n")
+
 def ensure_user_config_exists():
     if not path.exists(USER_CONFIG_FILE):
         write_default_config_ini()
@@ -55,18 +62,25 @@ def ensure_user_config_exists():
         print("'config_user.ini' was created.")
         print("[Attention] It may be necessary to restart the application the first time for it to work properly.")
 
+user_cfg = None
+
 def load_user_config():
+    global user_cfg
     ensure_user_config_exists()
     parser = ConfigParser()
     parser.optionxform = str
     parser.read(USER_CONFIG_FILE)
-    user_cfg = {}
+    user_cfg_local = {}
     for section in parser.sections():
         for k, v in parser[section].items():
-            try:
-                user_cfg[k] = float(v) if "." in v or "e" in v.lower() else int(v)
-            except Exception:
-                user_cfg[k] = v
+            if k == "DEVELOPER_DEBUG":
+                user_cfg_local[k] = v.lower() in ("1", "true", "yes", "on")
+            else:
+                try:
+                    user_cfg_local[k] = float(v) if "." in v or "e" in v.lower() else int(v)
+                except Exception:
+                    user_cfg_local[k] = v
     print("--------------------------------------------------------")
     print("'config_user.ini' was loaded.")
+    user_cfg = user_cfg_local
     return user_cfg 
