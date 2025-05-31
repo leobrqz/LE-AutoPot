@@ -20,7 +20,8 @@ Based on [Skalety's Auto Potion](https://www.unknowncheats.me/forum/other-mmorpg
 
 
 ## 📝 Changelog
-
+### **1.2.1**
+- Added ´DEVELOPER_DEBUG` option for extra debug information 
 ### **1.2**
 - Updated offsets for Last Epoch version **1.2.5.2**.
 - Small overlay improvements
