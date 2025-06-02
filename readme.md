@@ -27,9 +27,6 @@ Based on [Skalety's Auto Potion](https://www.unknowncheats.me/forum/other-mmorpg
 - Small overlay improvements
 - Added more relevant debug statements to the console
 -  _Just in case_ - there are two backup pointers available in `config.py`
-### **1.1**
-- Updated HP pointer offsets for Last Epoch version **1.2.5.1**.
-
 
 ## ✨ Features
 <p align="center">

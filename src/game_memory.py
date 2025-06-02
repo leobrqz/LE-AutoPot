@@ -13,7 +13,29 @@ def get_hp_address(pm):
         get_hp_address.last_error_time = 0
     if not hasattr(get_hp_address, "last_successful_chain"):
         get_hp_address.last_successful_chain = None
-    COOLDOWN = 60  # 1 minute in seconds
+    COOLDOWN = 15  # 15 seconds
+
+    def print_error_throttled(error_msg):
+        now = time()
+        if (get_hp_address.last_error != error_msg or 
+            (now - get_hp_address.last_error_time) > COOLDOWN):
+            print(error_msg)
+            get_hp_address.last_error = error_msg
+            get_hp_address.last_error_time = now
+
+    if not hasattr(get_hp_address, "last_debug_error"):
+        get_hp_address.last_debug_error = None
+    if not hasattr(get_hp_address, "last_debug_error_time"):
+        get_hp_address.last_debug_error_time = 0
+
+    def debug_print_throttled(error_msg):
+        now = time()
+        if (get_hp_address.last_debug_error != error_msg or
+            (now - get_hp_address.last_debug_error_time) > COOLDOWN):
+            debug_print(error_msg)
+            get_hp_address.last_debug_error = error_msg
+            get_hp_address.last_debug_error_time = now
+
     try:
         # Ensure Pymem object is valid.
         if pm is None or pm.process_handle is None:
@@ -24,11 +46,7 @@ def get_hp_address(pm):
  
         if mod is None:
             error_msg = f"[ERROR] Module not found: {config.MODULE_NAME}"
-            now = time()
-            if get_hp_address.last_error != error_msg or now - get_hp_address.last_error_time > COOLDOWN:
-                print(error_msg)
-                get_hp_address.last_error = error_msg
-                get_hp_address.last_error_time = now
+            print_error_throttled(error_msg)
             return None
  
         # Calculate the initial address using the module base and a base offset.
@@ -38,47 +56,27 @@ def get_hp_address(pm):
         for i, off in enumerate(config.OFFSETS):
             if addr is None:
                 error_msg = f"[ERROR] Address is None at offset index {i}"
-                now = time()
-                if get_hp_address.last_error != error_msg or now - get_hp_address.last_error_time > COOLDOWN:
-                    print(error_msg)
-                    get_hp_address.last_error = error_msg
-                    get_hp_address.last_error_time = now
-                return None
+                debug_print_throttled(error_msg)
+                raise Exception(error_msg)
             try:
                 next_addr = pm.read_ulonglong(addr) + off
                 if next_addr == off:
                     error_msg = f"[ERROR] Next address equals offset ({off}) at index {i}"
-                    now = time()
-                    if get_hp_address.last_error != error_msg or now - get_hp_address.last_error_time > COOLDOWN:
-                        print(error_msg)
-                        get_hp_address.last_error = error_msg
-                        get_hp_address.last_error_time = now
-                    return None
+                    debug_print_throttled(error_msg)
+                    raise Exception(error_msg)
                 if next_addr < 4096 and i < len(config.OFFSETS) -1:
                     error_msg = f"[ERROR] Next address too low ({next_addr}) at index {i}"
-                    now = time()
-                    if get_hp_address.last_error != error_msg or now - get_hp_address.last_error_time > COOLDOWN:
-                        print(error_msg)
-                        get_hp_address.last_error = error_msg
-                        get_hp_address.last_error_time = now
-                    return None
+                    debug_print_throttled(error_msg)
+                    raise Exception(error_msg)
                 addr = next_addr
                 chain_addresses.append(addr)
             except pymem_exception.PymemError as e:
                 error_msg = f"[ERROR] PymemError during pointer chain at index {i}: {e}"
-                now = time()
-                if get_hp_address.last_error != error_msg or now - get_hp_address.last_error_time > COOLDOWN:
-                    print(error_msg)
-                    get_hp_address.last_error = error_msg
-                    get_hp_address.last_error_time = now
+                print_error_throttled(error_msg)
                 return None
             except Exception as e:
                 error_msg = f"[ERROR] Exception during pointer chain at index {i}: {e}"
-                now = time()
-                if get_hp_address.last_error != error_msg or now - get_hp_address.last_error_time > COOLDOWN:
-                    print(error_msg)
-                    get_hp_address.last_error = error_msg
-                    get_hp_address.last_error_time = now
+                print_error_throttled(error_msg)
                 return None
         # Only print the pointer chain if the pointer path (excluding the final HP address) is different
         current_pointer_path = tuple(chain_addresses[:-1])
@@ -92,19 +90,11 @@ def get_hp_address(pm):
  
     except pymem_exception.PymemError as e:
         error_msg = f"[ERROR] PymemError in get_hp_address: {e}"
-        now = time()
-        if get_hp_address.last_error != error_msg or now - get_hp_address.last_error_time > COOLDOWN:
-            print(error_msg)
-            get_hp_address.last_error = error_msg
-            get_hp_address.last_error_time = now
+        print_error_throttled(error_msg)
         return None
     except Exception as e:
          error_msg = f"[ERROR] Exception in get_hp_address: {e}"
-         now = time()
-         if get_hp_address.last_error != error_msg or now - get_hp_address.last_error_time > COOLDOWN:
-             print(error_msg)
-             get_hp_address.last_error = error_msg
-             get_hp_address.last_error_time = now
+         print_error_throttled(error_msg)
          return None
  
 # Checks if the target game window is currently the foreground (active) window.

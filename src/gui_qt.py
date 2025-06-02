@@ -37,13 +37,7 @@ class OverlayWindow(QWidget):
         self._start_worker()
 
     def print_startup_info(self):
-        print("\n--------------------------------------------------------")
-        if self.user_cfg['DEVELOPER_DEBUG']:
-            print(f"[Last Epoch Auto Potion - v{config.APP_VERSION} (Developer Mode)]")
-        else:
-            print(f"[Last Epoch Auto Potion - v{config.APP_VERSION}]")
-        
-        print(f"For Last Epoch version: {config.LAST_EPOCH_VERSION}")
+        self.print_startup_header()
         print("\nHotkeys:")
         print(f"  {self.user_cfg['HOTKEY_TOGGLE']:<20} - Toggle Auto Potion")
         print(f"  {self.user_cfg['HOTKEY_HIDE_SHOW']:<20} - Show/Hide Overlay")
@@ -57,6 +51,18 @@ class OverlayWindow(QWidget):
         print(f"  Initial Position: x={int(self.user_cfg['INITIAL_POS_X'])}, y={int(self.user_cfg['INITIAL_POS_Y'])}")
         print("\n--------------------------------------------------------")
 
+    def print_startup_header(self):
+        print("\n--------------------------------------------------------")
+        if self.user_cfg['DEVELOPER_DEBUG']:
+            print(f"[Last Epoch Auto Potion - v{config.APP_VERSION} (Developer Mode)]")
+            print(f"For Last Epoch version: {config.LAST_EPOCH_VERSION}\n")
+            print(f"> Module name: {config.MODULE_NAME}")
+            print(f"> Using pointer chain: base={config.BASE_OFFSET}, offsets={config.OFFSETS}")
+        else:
+            print(f"[Last Epoch Auto Potion - v{config.APP_VERSION}]")
+            print(f"For Last Epoch version: {config.LAST_EPOCH_VERSION}")
+
+    
     def init_ui(self):
         self.setWindowFlags(
             Qt.FramelessWindowHint |
