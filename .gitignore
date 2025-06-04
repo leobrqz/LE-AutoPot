@@ -6,3 +6,6 @@ build/
 release/
 
 config_user.ini
+
+.github/
+actions-runner/
